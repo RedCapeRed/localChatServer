@@ -8,6 +8,4 @@ public class ResponseData {
     public void setIntValue(int intValue) {
         this.intValue = intValue;
     }
-
-    // standard getters and setters
 }

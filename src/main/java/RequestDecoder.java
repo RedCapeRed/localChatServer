@@ -5,17 +5,26 @@ import io.netty.handler.codec.ReplayingDecoder;
 import java.nio.charset.Charset;
 import java.util.List;
 
-public class RequestDecoder extends ReplayingDecoder<RequestData> {
+public class RequestDecoder extends ReplayingDecoder<UserData> {
 
     private final Charset charset = Charset.forName("UTF-8");
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf inBuf, List<Object> out) throws Exception {
+        System.out.println("RequestDecoder: " + "decode");
 
-        RequestData data = new RequestData();
-        data.setIntValue(inBuf.readInt());
-        int strLen = inBuf.readInt();
-        data.setStringValue(inBuf.readCharSequence(strLen, charset).toString());
-        out.add(data);
+        int messageCode = inBuf.readInt();
+        if(messageCode == Const.REQUEST_AUTHORIZATION) {
+            UserData data = new UserData();
+            int strLen = inBuf.readInt();
+            data.setLogin(inBuf.readCharSequence(strLen, charset).toString());
+            int charArrayLen = inBuf.readInt();
+            char[] password = new char[charArrayLen];
+            for(int i = 0;i < charArrayLen;i++){
+                password[i] = inBuf.readChar();
+            }
+            data.setPassword(password);
+            out.add(data);
+        }
     }
 }
