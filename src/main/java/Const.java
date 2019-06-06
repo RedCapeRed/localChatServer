@@ -1,3 +1,5 @@
+import Database.services.UserService;
+
 public class Const {
     //=========================================== REQUEST CODE =====================================================
     public static int REQUEST_AUTHORIZATION = 100,REQUEST_REGISTRATION = 101,REQUEST_ADD_FRIEND = 102;
@@ -9,4 +11,10 @@ public class Const {
 
     //=========================================== SUCCESS CODE =====================================================
     public static int SUCCESS_OPERATION = 200;
+
+
+    public static UserService userService;
+
+
+
 }
