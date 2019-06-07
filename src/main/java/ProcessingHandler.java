@@ -1,6 +1,4 @@
-
-import Database.dao.UserDAO;
-import Database.services.UserService;
+import Database.DatabaseHandler;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,10 +12,17 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
         System.out.println("ProcessingHandler: " + "channelRead");
         UserData userData = (UserData) msg;
         ResponseData responseData = new ResponseData();
-        responseData.setIntValue(Const.SUCCESS_OPERATION);
-        ChannelFuture future = ctx.writeAndFlush(responseData);
-        future.addListener(ChannelFutureListener.CLOSE);
-        System.out.println(userData);
 
+        if(DatabaseHandler.getUserByLogin(userData.getLogin(),userData.getPassword()).equals("found")) {
+            responseData.setIntValue(Const.SUCCESS_OPERATION);
+            ChannelFuture future = ctx.writeAndFlush(responseData);
+            future.addListener(ChannelFutureListener.CLOSE);
+            System.out.println(userData);
+        }else{
+            responseData.setIntValue(Const.ERROR_ACCOUNT_NO_EXIST);
+            ChannelFuture future = ctx.writeAndFlush(responseData);
+            future.addListener(ChannelFutureListener.CLOSE);
+            System.out.println(userData);
+        }
     }
 }

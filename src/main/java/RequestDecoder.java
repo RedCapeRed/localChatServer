@@ -19,16 +19,14 @@ public class RequestDecoder extends ReplayingDecoder<UserData> {
             authorizationProcess(ctx,inBuf,out);
         }
     }
+
+
     void authorizationProcess(ChannelHandlerContext ctx, ByteBuf inBuf, List<Object> out){
         UserData data = new UserData();
-        int strLen = inBuf.readInt();
-        data.setLogin(inBuf.readCharSequence(strLen, charset).toString());
-        int charArrayLen = inBuf.readInt();
-        char[] password = new char[charArrayLen];
-        for(int i = 0;i < charArrayLen;i++){
-            password[i] = inBuf.readChar();
-        }
-        data.setPassword(password);
+        int loginLength = inBuf.readInt();
+        data.setLogin(inBuf.readCharSequence(loginLength, charset).toString());
+        int passwordLength = inBuf.readInt();
+        data.setPassword(inBuf.readCharSequence(loginLength, charset).toString());
         out.add(data);
     }
 }
