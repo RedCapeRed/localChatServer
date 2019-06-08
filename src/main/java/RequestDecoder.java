@@ -12,21 +12,22 @@ public class RequestDecoder extends ReplayingDecoder<UserData> {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf inBuf, List<Object> out) throws Exception {
         System.out.println("RequestDecoder: " + "decode");
-
         int messageCode = inBuf.readInt();     //Достаем код сообщения(Авторизация/регистрация/отправка сообщения)
-
-        if(messageCode == Const.REQUEST_AUTHORIZATION || messageCode == Const.REQUEST_REGISTRATION) {
+        System.out.println(messageCode);
+        if(messageCode == Const.REQUEST_AUTHORIZATION || messageCode == Const.REQUEST_REGISTRATION)
             authorizationProcess(ctx,inBuf,out);
-        }
     }
 
 
-    void authorizationProcess(ChannelHandlerContext ctx, ByteBuf inBuf, List<Object> out){
+    private void authorizationProcess(ChannelHandlerContext ctx, ByteBuf inBuf, List<Object> out){
+        System.out.println(1);
         UserData data = new UserData();
         int loginLength = inBuf.readInt();
         data.setLogin(inBuf.readCharSequence(loginLength, charset).toString());
         int passwordLength = inBuf.readInt();
-        data.setPassword(inBuf.readCharSequence(loginLength, charset).toString());
+        data.setPassword(inBuf.readCharSequence(passwordLength, charset).toString());
+        data.setRegistered(inBuf.readBoolean());
         out.add(data);
+        System.out.println(2);
     }
 }

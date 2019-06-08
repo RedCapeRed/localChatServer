@@ -3,6 +3,7 @@ public class UserData {
 
     private String login;
     private String password;
+    private boolean isRegistered;
 
     public String getLogin() {
         return login;
@@ -15,6 +16,13 @@ public class UserData {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
+    }
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
     }
 
     @Override
